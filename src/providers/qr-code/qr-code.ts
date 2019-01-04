@@ -1,5 +1,7 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
+import QRCode from 'qrcode';
+import jsQR from "jsqr";
+import {getImageDataFromUrl} from "../../utils";
 
 /*
   Generated class for the QrCodeProvider provider.
@@ -10,13 +12,29 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class QrCodeProvider {
 
-  constructor(public http: HttpClient) {
-    console.log('Hello QrCodeProvider Provider');
-  }
+    generated: '';
 
-  generate(text: string): Promise<string> {
-    //TODO: Code this
-    return Promise.resolve('');
-  }
+    constructor() {
+        console.log('Hello QrCodeProvider Provider');
+    }
 
+    generate(text: string) {
+        const qrcode = QRCode;
+        const self = this;
+        qrcode.toDataURL(text, { errorCorrectionLevel: 'H' }, function (err, url) {
+          self.generated = url;
+        });
+        return self.generated;
+    }
+
+    static async decode(url) {
+        const imageData = await getImageDataFromUrl(url);
+        const qrcode = jsQR(imageData.data, imageData.width, imageData.height);
+
+        if (qrcode && qrcode.data !== undefined) {
+            return qrcode.data;
+        }
+
+        throw new Error("Unable to decode the QR code");
+    }
 }

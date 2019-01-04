@@ -1,0 +1,28 @@
+<ion-header>
+
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>ScanQR</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-6>
+        <button ion-button (tap)="fromCamera()">Lire via caméra</button>
+      </ion-col>
+
+      <ion-col col-6>
+        <button ion-button (tap)="fromImage()">Lire via image</button>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="text" style="margin-top: 50px">
+      Texte décodé: <b>{{ text }}</b>
+    </ion-row>
+  </ion-grid>
+</ion-content>
